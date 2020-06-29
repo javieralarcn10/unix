@@ -1,32 +1,16 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+const path = require('path');
 require('dotenv').config()
 const app = express()
+app.use(bodyParser.urlencoded({ extended: false }))
 const port = process.env.PORT
 
-app.get('/', (req, res) => res.send('Hola mundo!'))
-app.get('/ls', async function(req, res) {
+app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
+app.post('/command', async function(req, res) {
     const { exec } = require('child_process');
-    exec('cd .. && ls', (err, stdout, stderr) => {
-        if (err) {
-            res.send(err)
-        } else {
-            res.send(stdout)
-        }
-    });
-})
-app.get('/pm2-monit', async function(req, res) {
-    const { exec } = require('child_process');
-    exec('pm2 monit', (err, stdout, stderr) => {
-        if (err) {
-            res.send(err)
-        } else {
-            res.send(stdout)
-        }
-    });
-})
-app.get('/pm2', async function(req, res) {
-    const { exec } = require('child_process');
-    exec('pm2 list', (err, stdout, stderr) => {
+    const command = req.body.command;
+    exec(command, (err, stdout, stderr) => {
         if (err) {
             res.send(err)
         } else {
