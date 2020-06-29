@@ -3,7 +3,7 @@ require('dotenv').config()
 const app = express()
 const port = process.env.PORT
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.send('Hola mundo!'))
 app.get('/ls', async function(req, res) {
     const { exec } = require('child_process');
     exec('ls', (err, stdout, stderr) => {
